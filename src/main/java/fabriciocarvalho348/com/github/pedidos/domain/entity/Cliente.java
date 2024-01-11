@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Cliente implements Serializable {
@@ -39,6 +40,10 @@ public class Cliente implements Serializable {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "PERFIS")
     private Set<Integer> perfis = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cliente")
+    private List<Pedido> pedidos = new ArrayList<>();
 
     public Cliente() {
         addPerfil(Perfil.CLIENTE);
@@ -86,12 +91,12 @@ public class Cliente implements Serializable {
         this.cpfCnpj = cpfCnpj;
     }
 
-    public Integer getTipo() {
-        return tipo;
+    public TipoCliente getTipo() {
+        return TipoCliente.toEnum(this.tipo);
     }
 
-    public void setTipo(Integer tipo) {
-        this.tipo = tipo;
+    public void setTipo(TipoCliente tipo) {
+    this.tipo = tipo.getCod();
     }
 
     public String getSenha() {
@@ -118,8 +123,22 @@ public class Cliente implements Serializable {
         this.telefones = telefones;
     }
 
+    public Set<Perfil> getPerfil() {
+        return perfis.stream()
+                .map(x -> Perfil.toEnum(x))
+                .collect(Collectors.toSet());
+    }
+
     public void addPerfil(Perfil perfil) {
         perfis.add(perfil.getCod());
+    }
+
+    public List<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
     }
 
     @Override

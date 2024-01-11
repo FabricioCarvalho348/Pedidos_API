@@ -3,12 +3,13 @@ package fabriciocarvalho348.com.github.pedidos.domain.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "estado")
-public class Estado {
+public class Estado implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
